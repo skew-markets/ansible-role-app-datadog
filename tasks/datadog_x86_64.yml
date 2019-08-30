@@ -1,0 +1,86 @@
+---
+# --------------------------------
+
+- name: 'update package cache and install pre-requisites'
+  apt:
+    name: apt-transport-https
+    update_cache: false
+    state: present
+  become: true
+  tags:
+  - datadog
+  - datadog-pkg
+  - x-pkg
+
+# --------------------------------
+
+- name: 'add public key of DataDog repo'
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: '{{datadog_pubkey_id}}'
+    validate_certs: true
+    state: present
+  become: true
+  tags:
+  - datadog
+  - datadog-repo
+  - x-repo
+
+- name: 'add DataDog repository'
+  apt_repository:
+    repo: 'deb https://apt.datadoghq.com/ stable 6'
+    filename: 'datadog'
+    state: present
+    update_cache: true
+    validate_certs: true
+  become: true
+  tags:
+  - datadog
+  - datadog-repo
+  - x-repo
+
+# --------------------------------
+
+- name: 'install DataDog agent'
+  apt:
+    name: datadog-agent
+    state: present
+  become: true
+  tags:
+  - datadog
+  - datadog-pkg
+  - x-pkg
+
+- name: 'render template for DataDog config file'
+  template:
+    src: datadog.yaml.j2
+    dest: '{{datadog_cfg_file}}'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  become: true
+  notify: '{{datadog_handler}}'
+  tags:
+  - datadog
+  - datadog-cfg
+
+# --------------------------------
+
+- name: 'set DataDog service = ({{datadog_agent_status}}, {{datadog_agent_enabled}})'
+  systemd:
+    name: '{{item}}'
+    state: '{{datadog_agent_status}}'
+    enabled: '{{datadog_agent_enabled}}'
+    masked: '{{datadog_agent_enabled | ternary(false, true)}}'
+  become: true
+  with_items:
+  - '{{datadog_svc_name}}'
+  - 'datadog-agent-process'
+  - 'datadog-agent-trace'
+  tags:
+  - datadog
+  - datadog-svc
+  - x-svc
+
+# --------------------------------
+...

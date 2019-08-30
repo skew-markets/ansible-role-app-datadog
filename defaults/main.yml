@@ -1,0 +1,12 @@
+---
+datadog_etc_dir: /etc/datadog-agent
+#
+datadog_agent_enabled: false
+datadog_agent_status: stopped
+datadog_cfg_file: '{{datadog_etc_dir}}/datadog.yaml'
+datadog_group: dd-agent
+datadog_handler: handler_restart_datadog
+datadog_owner: dd-agent
+datadog_pubkey_id: 382E94DE
+datadog_svc_name: datadog-agent
+...

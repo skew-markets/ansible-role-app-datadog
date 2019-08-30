@@ -1,0 +1,23 @@
+# --------------------------------
+# Ansible managed file 
+#
+# Datadog does it's own rotation
+# so just do a maxage clean up
+# --------------------------------
+
+/var/log/datadog/agent.log {
+  weekly
+  maxage 28
+}
+
+/var/log/datadog/process-agent.log {
+  weekly
+  maxage 28
+}
+
+/var/log/datadog/trace-agent.log {
+  weekly
+  maxage 28
+}
+
+# --------------------------------
