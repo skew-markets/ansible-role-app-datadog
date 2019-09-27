@@ -1,6 +1,16 @@
 ---
 # --------------------------------
 
+- name: 'override service name for Ubuntu 14'
+  set_fact:
+    datadog_svc_name: datadog-agent
+    datadog_handler: handler_restart_datadog_old
+  when:
+  - ct_distro == 'ubuntu'
+  - ct_distro_major|int == 14
+  tags:
+  - ct-datadog
+
 - name: 'update package cache and install pre-requisites'
   apt:
     name: apt-transport-https
@@ -8,9 +18,7 @@
     state: present
   become: true
   tags:
-  - datadog
-  - datadog-pkg
-  - x-pkg
+  - ct-datadog
 
 # --------------------------------
 
@@ -22,9 +30,7 @@
     state: present
   become: true
   tags:
-  - datadog
-  - datadog-repo
-  - x-repo
+  - ct-datadog
 
 - name: 'add DataDog repository'
   apt_repository:
@@ -35,21 +41,17 @@
     validate_certs: true
   become: true
   tags:
-  - datadog
-  - datadog-repo
-  - x-repo
+  - ct-datadog
 
 # --------------------------------
 
 - name: 'install DataDog agent'
   apt:
     name: datadog-agent
-    state: present
+    state: '{{datadog_state}}'
   become: true
   tags:
-  - datadog
-  - datadog-pkg
-  - x-pkg
+  - ct-datadog
 
 - name: 'render template for DataDog config file'
   template:
@@ -58,11 +60,11 @@
     mode: '0644'
     owner: '{{datadog_owner}}'
     group: '{{datadog_group}}'
+  when: datadog_state == 'present'
   become: true
   notify: '{{datadog_handler}}'
   tags:
-  - datadog
-  - datadog-cfg
+  - ct-datadog
 
 # --------------------------------
 
@@ -78,9 +80,7 @@
   - 'datadog-agent-process'
   - 'datadog-agent-trace'
   tags:
-  - datadog
-  - datadog-svc
-  - x-svc
+  - ct-datadog
 
 # --------------------------------
 ...

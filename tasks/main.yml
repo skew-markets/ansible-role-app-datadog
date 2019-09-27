@@ -1,51 +1,17 @@
 ---
 # --------------------------------
 
-- name: 'override service name for Ubuntu 14'
-  set_fact:
-    datadog_svc_name: datadog-agent
-    datadog_handler: handler_restart_datadog_old
-  when:
-  - ct_distro == 'ubuntu'
-  - ct_distro_major|int == 14
+- name: 'include common tasks'
+  include_tasks: common.yml
   tags:
-  - datadog
-  - datadog-svc
-  - x-svc
+  - ct-datadog
 
-- name: 'include arch specific file'
-  include_tasks: datadog_{{ct_arch}}.yml
+- name: 'include {{ct_distro}} tasks'
+  include_tasks: setup_{{ct_distro}}.yml
   when:
-  - ct_distro == 'ubuntu'
+  - ct_distro == 'ubuntu' or ct_distro == 'redhat'
   tags:
-  - datadog
-
-- name: 'copy NTP config file over'
-  copy:
-    src: ntp.yaml
-    dest: '{{datadog_etc_dir}}/conf.d/ntp.d/ntp.yaml'
-    mode: '0644'
-    owner: '{{datadog_owner}}'
-    group: '{{datadog_group}}'
-  when:
-  - ct_distro == 'ubuntu'
-  become: true
-  notify: '{{datadog_handler}}'
-  tags:
-  - datadog
-
-- name: 'install logrotate config'
-  copy:
-    src: logrotate
-    dest: /etc/logrotate.d/datadog
-    owner: root
-    group: root
-    mode: '0644'
-  become: true
-  tags:
-  - datadog
-  - datadog-hkp
-  - x-hkp
+  - ct-datadog
 
 # --------------------------------
 ...

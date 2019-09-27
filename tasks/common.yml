@@ -1,0 +1,28 @@
+---
+# --------------------------------
+
+- name: 'copy NTP config file over'
+  copy:
+    src: ntp.yaml
+    dest: '{{datadog_etc_dir}}/conf.d/ntp.d/ntp.yaml'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  become: true
+  notify: '{{datadog_handler}}'
+  tags:
+  - ct-datadog
+
+- name: 'install logrotate config'
+  copy:
+    src: logrotate
+    dest: /etc/logrotate.d/datadog
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  tags:
+  - ct-datadog
+
+# --------------------------------
+...

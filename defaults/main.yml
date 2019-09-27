@@ -9,5 +9,6 @@ datadog_group: dd-agent
 datadog_handler: handler_restart_datadog
 datadog_owner: dd-agent
 datadog_pubkey_id: 382E94DE
+datadog_state: present
 datadog_svc_name: datadog-agent
 ...
