@@ -6,10 +6,10 @@
   tags:
   - ct-datadog
 
-- name: 'include {{ct_distro}} tasks'
-  include_tasks: setup_{{ct_distro}}.yml
+- name: 'include {{ct_family}} tasks'
+  include_tasks: setup_{{ct_family}}.yml
   when:
-  - ct_distro == 'ubuntu' or ct_distro == 'redhat'
+  - ct_family == 'debian' or ct_family == 'redhat'
   tags:
   - ct-datadog
 
