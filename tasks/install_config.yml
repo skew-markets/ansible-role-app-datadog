@@ -1,0 +1,14 @@
+---
+- name: 'render template for DataDog config file'
+  template:
+    src: datadog.yaml.j2
+    dest: '{{datadog_cfg_file}}'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  when: datadog_state == 'present'
+  become: true
+  notify: '{{datadog_handler}}'
+  tags:
+  - ct-datadog
+...
