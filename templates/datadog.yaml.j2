@@ -8,4 +8,14 @@ tags:
 - {{tag.key}}:{{tag.value}}
 {% endfor %}
 {% endif %}
+{% if ct_container is defined and ct_container == 'docker' %}
+logs_enabled: true
+listeners:
+  - name: docker
+config_providers:
+  - name: docker
+    polling: true
+logs_config:
+  container_collect_all: true
+{% endif %}
 # end
