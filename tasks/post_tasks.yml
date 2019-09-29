@@ -1,7 +1,7 @@
 ---
 # --------------------------------
 
-- name: 'copy NTP config file over'
+- name: 'copy over NTP config file'
   copy:
     src: ntp.yaml
     dest: '{{datadog_etc_dir}}/conf.d/ntp.d/ntp.yaml'
@@ -13,14 +13,27 @@
   tags:
   - ct-datadog
 
-- name: 'add datadog user to docker OS group'
+- name: 'add {{datadog_owner}} to docker OS group'
   user:
     append: true
     groups: docker
     name: '{{datadog_owner}}'
     state: present
-  become: true
   when: (ct_container|default('null')) == 'docker'
+  become: true
+  tags:
+  - ct-datadog
+
+- name: 'copy over Docker daemon config file'
+  copy:
+    src: docker_daemon.yaml
+    dest: '{{datadog_etc_dir}}/conf.d/docker.d/docker_daemon.yaml'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  when: (ct_container|default('null')) == 'docker'
+  become: true
+  notify: '{{datadog_handler}}'
   tags:
   - ct-datadog
 
