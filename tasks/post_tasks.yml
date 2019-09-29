@@ -13,6 +13,17 @@
   tags:
   - ct-datadog
 
+- name: 'add datadog user to docker OS group'
+  user:
+    append: true
+    groups: docker
+    name: '{{datadog_owner}}'
+    state: present
+  become: true
+  when: (ct_container|default('null')) == 'docker'
+  tags:
+  - ct-datadog
+
 - name: 'install logrotate config'
   copy:
     src: logrotate
