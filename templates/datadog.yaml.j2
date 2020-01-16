@@ -7,6 +7,11 @@ tags:
 {% for tag in datadog_tags %}
 - {{tag.key}}:{{tag.value}}
 {% endfor %}
+{% if datadog_extra_tags is defined %}
+{% for tag in datadog_extra_tags %}
+- {{tag.key}}:{{tag.value}}
+{% endfor %}
+{% endif %}
 {% endif %}
 {% if ct_container is defined and ct_container == 'docker' %}
 logs_enabled: true
