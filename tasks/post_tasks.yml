@@ -1,6 +1,18 @@
 ---
 # --------------------------------
 
+- name: 'copy over disk config file'
+  copy:
+    src: disk.yaml
+    dest: '{{datadog_etc_dir}}/conf.d/disk.d/disk.yaml'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  become: true
+  notify: '{{datadog_handler}}'
+  tags:
+  - ct-datadog
+
 - name: 'copy over NTP config file'
   copy:
     src: ntp.yaml

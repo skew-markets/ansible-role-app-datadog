@@ -1,0 +1,12 @@
+---
+init_config:
+
+instances:
+- use_mount: false
+  file_system_whitelist:
+  - ext[34]$
+  - tmpfs$
+  file_system_blacklist:
+  - loopfs$
+  tag_by_filesystem: true
+...
