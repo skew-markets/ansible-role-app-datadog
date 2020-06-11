@@ -28,13 +28,18 @@ Installs and enables a DataDog agent
 ## Optional variables
 | Name | Value | Description |
 | ---- | ----- | ----------- |
-| datadog_tags | list of {key: 'keyName', value: 'valueOfKey' } | Used to tag hosts in the Datadig console |
+| datadog_tags | dict | Used to tag hosts in the Datadog console |
+
+Also, if you add a dictionary called 'datadog' to host or group vars, its contents will be set as tags in Datadog
 
 ## Supported Distros
-Ubuntu 16, 18
-Amazon Linux 2
+- Ubuntu 16
+- Ubuntu 18
+- Amazon Linux 2
 
-## Untested
-CentOS and RHEL using systemd should also work
+## Untested, but should work
+- CentOS 7+
+- RHEL 7+ if using systemd
+- Ubuntu 20
 
 ****

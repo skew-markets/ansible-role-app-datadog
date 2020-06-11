@@ -1,19 +1,30 @@
-{{ansible_managed|comment}}
+---
+# MANAGED_BY_ANSIBLE
 api_key: {{datadog_api_key}}
 dd_url: https://app.datadoghq.com
 hostname: {{inventory_hostname}}
-{% if datadog_tags is defined and datadog_tags|length > 0 %}
+#
 tags:
-{% for tag in datadog_tags %}
-- {{tag.key}}:{{tag.value}}
+{% if hostvars[inventory_hostname]['datadog'] is defined %}
+{% for key, value in hostvars[inventory_hostname]['datadog'].items() %}
+- {{key}}:{{value}}
 {% endfor %}
+{% endif %}
+{% if datadog_tags is defined %}
+{% for key, value in datadog_tags.items() %}
+- {{key}}:{{value}}
+{% endfor %}
+{% endif %}
 {% if datadog_extra_tags is defined %}
-{% for tag in datadog_extra_tags %}
-- {{tag.key}}:{{tag.value}}
+{% for key, value in datadog_extra_tags.items() %}
+- {{key}}:{{value}}
 {% endfor %}
 {% endif %}
+{% if hostvars[inventory_hostname]['datadog'] is not defined %}
+- zzdummy:whatever
 {% endif %}
-{% if ct_container is defined and ct_container == 'docker' %}
+#
+{% if (ct_container | default('SKIP')) == 'docker' %}
 logs_enabled: true
 listeners:
   - name: docker
@@ -23,4 +34,4 @@ config_providers:
 logs_config:
   container_collect_all: true
 {% endif %}
-# end
+...
