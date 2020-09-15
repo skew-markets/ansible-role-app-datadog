@@ -4,6 +4,9 @@ api_key: {{datadog_api_key}}
 dd_url: https://app.datadoghq.com
 hostname: {{inventory_hostname}}
 #
+process_config:
+  enabled: "{{datadog_proc_monitoring | bool | lower}}"
+#
 tags:
 {% if hostvars[inventory_hostname]['datadog'] is defined %}
 {% for key, value in hostvars[inventory_hostname]['datadog'].items() %}
