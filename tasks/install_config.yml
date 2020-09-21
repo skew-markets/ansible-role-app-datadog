@@ -9,6 +9,7 @@
   when: datadog_state == 'present'
   become: true
   notify: '{{datadog_handler}}'
+  no_log: true
   tags:
   - ct-datadog
 ...
