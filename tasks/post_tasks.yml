@@ -40,7 +40,7 @@
     name: '{{datadog_owner}}'
     state: present
   when:
-  - datadog_add_docker_user
+  - datadog_add_docker_group
   - (ct_container|default('null')) == 'docker'
   become: true
   tags:
