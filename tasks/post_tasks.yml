@@ -25,11 +25,11 @@
   tags:
   - ct-datadog
 
-- name: 'add docker user to OS'
-  user:
+- name: 'add docker group to OS'
+  group:
     name: docker
     state: present
-  when: datadog_add_docker_user
+  when: datadog_add_docker_group
   become: true
   tags: [ct-datadog]
 

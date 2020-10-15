@@ -1,5 +1,5 @@
 ---
-datadog_add_docker_user: false
+datadog_add_docker_group: false
 datadog_agent_enabled: true
 datadog_agent_status: started
 datadog_arch: x86_64
