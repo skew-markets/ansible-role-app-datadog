@@ -53,7 +53,7 @@
   tags:
   - ct-datadog
 
-- name: 'render template for DataDog config file'
+- name: 'render template for DataDog config file (no_log)'
   template:
     src: datadog.yaml.j2
     dest: '{{datadog_cfg_file}}'
@@ -61,6 +61,7 @@
     owner: '{{datadog_owner}}'
     group: '{{datadog_group}}'
   when: datadog_state == 'present'
+  no_log: true
   become: true
   notify: '{{datadog_handler}}'
   tags:

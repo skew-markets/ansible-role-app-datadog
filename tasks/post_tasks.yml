@@ -25,13 +25,23 @@
   tags:
   - ct-datadog
 
+- name: 'add docker user to OS'
+  user:
+    name: docker
+    state: present
+  when: datadog_add_docker_user
+  become: true
+  tags: [ct-datadog]
+
 - name: 'add {{datadog_owner}} to docker OS group'
   user:
     append: true
     groups: docker
     name: '{{datadog_owner}}'
     state: present
-  when: (ct_container|default('null')) == 'docker'
+  when:
+  - datadog_add_docker_user
+  - (ct_container|default('null')) == 'docker'
   become: true
   tags:
   - ct-datadog
