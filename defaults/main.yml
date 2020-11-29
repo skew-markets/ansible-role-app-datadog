@@ -4,6 +4,7 @@ datadog_agent_enabled: true
 datadog_agent_status: started
 datadog_arch: x86_64
 datadog_cfg_file: '{{datadog_etc_dir}}/datadog.yaml'
+datadog_enable_system_probe: false
 datadog_etc_dir: /etc/datadog-agent
 datadog_group: dd-agent
 datadog_handler: handler_restart_datadog

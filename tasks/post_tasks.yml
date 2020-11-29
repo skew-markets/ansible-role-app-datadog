@@ -10,8 +10,7 @@
     group: '{{datadog_group}}'
   become: true
   notify: '{{datadog_handler}}'
-  tags:
-  - ct-datadog
+  tags: [ct-datadog]
 
 - name: 'copy over NTP config file'
   copy:
@@ -22,8 +21,18 @@
     group: '{{datadog_group}}'
   become: true
   notify: '{{datadog_handler}}'
-  tags:
-  - ct-datadog
+  tags: [ct-datadog]
+
+- name: 'render system probe config file'
+  template:
+    src: system-probe.yaml.j2
+    dest: '{{datadog_etc_dir}}/system-probe.yaml'
+    mode: '0644'
+    owner: '{{datadog_owner}}'
+    group: '{{datadog_group}}'
+  become: true
+  notify: '{{datadog_handler}}'
+  tags: [ct-datadog]
 
 - name: 'add docker group to OS'
   group:
@@ -43,8 +52,7 @@
   - datadog_add_docker_group
   - (ct_container|default('null')) == 'docker'
   become: true
-  tags:
-  - ct-datadog
+  tags: [ct-datadog]
 
 - name: 'copy over Docker daemon config file'
   copy:
@@ -56,8 +64,7 @@
   when: (ct_container|default('null')) == 'docker'
   become: true
   notify: '{{datadog_handler}}'
-  tags:
-  - ct-datadog
+  tags: [ct-datadog]
 
 - name: 'install logrotate config'
   copy:
@@ -67,8 +74,7 @@
     group: root
     mode: '0644'
   become: true
-  tags:
-  - ct-datadog
+  tags: [ct-datadog]
 
 # --------------------------------
 ...
